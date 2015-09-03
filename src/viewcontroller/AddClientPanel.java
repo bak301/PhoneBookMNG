@@ -26,13 +26,13 @@ public class AddClientPanel extends JPanel{
     public AddClientPanel() throws Exception{
         super(new SpringLayout());
         db = new Database();
+        dataList = new LinkedList<JTextField>();
+        para = new LinkedList<String>();
         initComponent();
     }
 
     // ******************* NEED REWORK ********************************
     protected void initComponent(){
-        dataList = new LinkedList<JTextField>();
-        para = new LinkedList<String>();
         String[] labels = { "First Name: ", "Last Name: ", "Birthday: ","CMND: ","Address: " };
 
         // Create input field for each label
@@ -68,7 +68,7 @@ public class AddClientPanel extends JPanel{
             JRadioButton rB = new JRadioButton(l);
             gds.add(rB);
             rB.addMouseListener((Press) e -> {
-                gd = rB.getName();
+                gd = rB.getText();
             });
             buttonGroup.add(rB);
         }
@@ -81,7 +81,7 @@ public class AddClientPanel extends JPanel{
     }
 
     private boolean isValidName(JTextField f){
-        return Pattern.matches("[a-zA-Z]+", f.getText());
+        return Pattern.matches("[a-zA-Z\\p{Space}]+", f.getText());
     }
 
     private boolean isValidPhone(JTextField f){

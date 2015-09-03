@@ -68,7 +68,7 @@ public class FindClientPanel extends JPanel {
 
                     while(x.hasNext()){
                         Client client = (Client) x.next();
-                        resultText += "ID: "+client.getID()+": "+client.getLastName()+" "+client.getFirstName()+"\n";
+                        resultText += "ID: "+client.getID()+": "+client.getLastName()+" "+client.getFirstName()+" "+client.getGender()+"\n";
                         result.setText(resultText);
                     }
                 }

@@ -16,7 +16,7 @@ public class Database {
     public ArrayList<Client> clientDB;
 
     public Database() throws Exception{
-        initDB();
+//        initDB();
         readDB();
     }
 
