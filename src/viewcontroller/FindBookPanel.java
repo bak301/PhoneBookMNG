@@ -35,7 +35,7 @@ public class FindBookPanel extends JPanel {
         add(result, BorderLayout.CENTER);
 
         // Delete button
-        rs = new ArrayList<Book>();
+        rs = new ArrayList<>();
         JButton del = new JButton("Delete");
         del.addMouseListener((Press)e -> {
             db.removeBook(rs);
@@ -47,7 +47,7 @@ public class FindBookPanel extends JPanel {
     private JPanel createParameterOption(){
         JPanel menu = new JPanel(new FlowLayout());
         String[] list = {"ID" , "ISBN" , "name" , "author" , "genre"};
-        JComboBox<String> cb = new JComboBox<String>(list);
+        JComboBox<String> cb = new JComboBox<>(list);
         cb.setSelectedIndex(0);
 
         JLabel label = new JLabel("Search by: ");

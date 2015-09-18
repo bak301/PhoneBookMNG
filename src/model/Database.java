@@ -21,14 +21,20 @@ public class Database {
 
     public void initDB() throws IOException{
         File file = new File("Book.db");
-        if (!file.exists()){
-            file.createNewFile();
+        if (file.exists()){
+            if (file.delete()){
+                System.out.println(" Old database deleted !");
+            } else {
+                System.out.println(" Cannot delete old database !");
+            }
+        }
+        if (file.createNewFile()){
+            System.out.println(" Database file created !");
         } else {
-            file.delete();
-            file.createNewFile();
+            System.out.println(" Cannot create new file !");
         }
         new ObjectOutputStream(new FileOutputStream(file)).writeObject(new ArrayList<Book>());
-        System.out.println("Database initialize");
+        System.out.println("Database initialized !");
     }
 
     public void readDB() throws Exception{
@@ -72,7 +78,7 @@ public class Database {
 
     // Find Books
     public ArrayList<Book> findBy(String field,String data){
-        ArrayList<Book> found = new ArrayList<Book>();
+        ArrayList<Book> found = new ArrayList<>();
         switch (field){
             case "ID":
                 found.addAll(BookDB.stream().filter(c -> String.valueOf(c.getID()).contains(data)).collect(Collectors.toList()));
