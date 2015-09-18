@@ -1,6 +1,6 @@
 package viewcontroller;
 
-import model.Client;
+import model.Book;
 import model.Database;
 
 import javax.swing.*;
@@ -13,12 +13,12 @@ import java.util.Iterator;
 /**
  * Created by bak on 01/09/2015.
  */
-public class FindClientPanel extends JPanel {
+public class FindBookPanel extends JPanel {
     private Database db;
     private JTextArea result;
-    private ArrayList<Client> rs;
+    private ArrayList<Book> rs;
 
-    public FindClientPanel() throws Exception{
+    public FindBookPanel() throws Exception{
         super(new BorderLayout());
         initComponent();
     }
@@ -35,18 +35,18 @@ public class FindClientPanel extends JPanel {
         add(result, BorderLayout.CENTER);
 
         // Delete button
-        rs = new ArrayList<Client>();
+        rs = new ArrayList<Book>();
         JButton del = new JButton("Delete");
-        del.addMouseListener((Press)e->{
-            db.removeClient(rs);
-            new JOptionPane().showMessageDialog(this,"Delete success!");
+        del.addMouseListener((Press)e -> {
+            db.removeBook(rs);
+            JOptionPane.showMessageDialog(this, "Delete success!");
         });
         add(del,BorderLayout.SOUTH);
     }
 
     private JPanel createParameterOption(){
         JPanel menu = new JPanel(new FlowLayout());
-        String[] list = {"ID","firstName","lastName","birthday","gender","address","cmnd"};
+        String[] list = {"ID" , "ISBN" , "name" , "author" , "genre"};
         JComboBox<String> cb = new JComboBox<String>(list);
         cb.setSelectedIndex(0);
 
@@ -67,8 +67,9 @@ public class FindClientPanel extends JPanel {
                     String resultText ="";
 
                     while(x.hasNext()){
-                        Client client = (Client) x.next();
-                        resultText += "ID: "+client.getID()+": "+client.getLastName()+" "+client.getFirstName()+" "+client.getGender()+"\n";
+                        Book book = (Book) x.next();
+                        resultText += "ID: " + book.getID() +
+                                "\n Name :" + book.getName() ;
                         result.setText(resultText);
                     }
                 }

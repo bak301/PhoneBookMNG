@@ -5,7 +5,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.stream.Collectors;
 
 /**
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
  */
 
 public class Database {
-    public ArrayList<Client> clientDB;
+    private ArrayList<Book> BookDB;
 
     public Database() throws Exception{
 //        initDB();
@@ -21,28 +20,32 @@ public class Database {
     }
 
     public void initDB() throws IOException{
-        File file = new File("client.db");
+        File file = new File("Book.db");
         if (!file.exists()){
             file.createNewFile();
         } else {
             file.delete();
             file.createNewFile();
         }
-        new ObjectOutputStream(new FileOutputStream(file)).writeObject(new ArrayList<Client>());
+        new ObjectOutputStream(new FileOutputStream(file)).writeObject(new ArrayList<Book>());
+        System.out.println("Database initialize");
     }
 
-    public ArrayList<Client> readDB() throws Exception{
-        clientDB = (ArrayList<Client>) new ObjectInputStream(new FileInputStream("client.db")).readObject();
-        return clientDB;
+    public void readDB() throws Exception{
+        BookDB = (ArrayList<Book>) new ObjectInputStream(new FileInputStream("Book.db")).readObject();
+    }
+
+    public ArrayList<Book> getBookDB() {
+        return BookDB;
     }
 
     private boolean updateDB(){
         try{
-            for(Client c:clientDB){
-                c.setID(clientDB.indexOf(c));
+            for(Book c:BookDB){
+                c.setID(BookDB.indexOf(c));
             }
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("client.db"));
-            oos.writeObject(clientDB);
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Book.db"));
+            oos.writeObject(BookDB);
             oos.flush();
             oos.close();
             return true;
@@ -52,50 +55,39 @@ public class Database {
         return false;
     }
 
-    //Add a client
-    public boolean addClient(Client c){
-        clientDB.add(c);
+    //Add a Book
+    public boolean addBook(Book c){
+        BookDB.add(c);
 
-        //Set client ID on the database
-        c.setID(clientDB.indexOf(c));
+        //Set Book ID on the database
+        c.setID(BookDB.indexOf(c));
         return updateDB();
     }
 
-    // Remove clients
-    public boolean removeClient(ArrayList<Client> found){
-        clientDB.removeAll(found);
+    // Remove Books
+    public boolean removeBook(ArrayList<Book> found){
+        BookDB.removeAll(found);
         return updateDB();
     }
 
-    // Find clients
-    public ArrayList<Client> findBy(String field,String data){
-        ArrayList<Client> found = new ArrayList<Client>();
+    // Find Books
+    public ArrayList<Book> findBy(String field,String data){
+        ArrayList<Book> found = new ArrayList<Book>();
         switch (field){
             case "ID":
-                found.addAll(clientDB.stream().filter(c -> String.valueOf(c.getID()).contains(data)).collect(Collectors.toList()));
+                found.addAll(BookDB.stream().filter(c -> String.valueOf(c.getID()).contains(data)).collect(Collectors.toList()));
                 break;
-            case "firstName":
-                found.addAll(clientDB.stream().filter(c -> c.getFirstName().contains(data)).collect(Collectors.toList()));
+            case "ISBN":
+                found.addAll(BookDB.stream().filter(c -> String.valueOf(c.getISBN()).contains(data)).collect(Collectors.toList()));
                 break;
-            case "lastName":
-                found.addAll(clientDB.stream().filter(c -> c.getLastName().contains(data)).collect(Collectors.toList()));
+            case "name":
+                found.addAll(BookDB.stream().filter(c -> c.getName().contains(data)).collect(Collectors.toList()));
                 break;
-            case "birthday":
-                found.addAll(clientDB.stream().filter(c -> StringToDate(data).equals(c.getBirthDay())).collect(Collectors.toList()));
+            case "author":
+                found.addAll(BookDB.stream().filter(c -> c.getAuthor().contains(data)).collect(Collectors.toList()));
                 break;
-            case "cmnd":
-                found.addAll(clientDB.stream().filter(c -> String.valueOf(c.getCmnd()).contains(data)).collect(Collectors.toList()));
-                break;
-            case "address":
-                found.addAll(clientDB.stream().filter(c -> c.getAddress().contains(data)).collect(Collectors.toList()));
-                break;
-            case "gender":
-                found.addAll(clientDB.stream().filter(c -> c.getGender().contains(data)).collect(Collectors.toList()));
-                break;
-            case "number":
-                for(Client c:clientDB){
-                    found.addAll(c.getNumList().stream().filter(phoneNumber -> String.valueOf(phoneNumber.getNumber()).contains(data)).map(phoneNumber -> c).collect(Collectors.toList()));
-                }
+            case "genre":
+                found.addAll(BookDB.stream().filter(c -> c.getGenre().toString().contains(data)).collect(Collectors.toList()));
                 break;
         }
         return found;
